@@ -4,6 +4,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.rafat.expensetracker.dto.JwtToken;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -18,19 +19,45 @@ public class JwtTokenProvider {
     private String secretKey;
 
     @Value("${jwt.expiration.access}")
-    private String expireDuration;
+    private Long accessTokenDuration;
 
-    public String generateToken(Authentication authentication) {
+    @Value("${jwt.expiration.refresh}")
+    private Long refreshTokenDuration;
+
+    public JwtToken generateToken(Authentication authentication) {
         String email = authentication.getName();
         Date now = new Date();
-        Date expirationDate = new Date(now.getTime() + expireDuration);
+        Date expirationDate = new Date(now.getTime() + (accessTokenDuration * 3600000));
 
-        return Jwts.builder()
+        String token = Jwts.builder()
                 .subject(email)
                 .issuedAt(now)
                 .expiration(expirationDate)
                 .signWith(key(), SignatureAlgorithm.HS256)
                 .compact();
+
+        return JwtToken.builder()
+                .token(token)
+                .expiration(expirationDate.getTime())
+                .build();
+    }
+
+    public JwtToken generateRefreshToken(Authentication authentication) {
+        String email = authentication.getName();
+        Date now = new Date();
+        Date expirationDate = new Date(now.getTime() + (refreshTokenDuration * 3600000));
+
+        String token = Jwts.builder()
+                .subject(email)
+                .issuedAt(now)
+                .expiration(expirationDate)
+                .signWith(key(), SignatureAlgorithm.HS256)
+                .compact();
+
+        return JwtToken.builder()
+                .token(token)
+                .expiration(expirationDate.getTime())
+                .build();
     }
 
     private Key key() {
