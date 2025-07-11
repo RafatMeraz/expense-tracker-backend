@@ -2,6 +2,7 @@ package io.rafat.expensetracker.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "users")
+@Builder(toBuilder = true)
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

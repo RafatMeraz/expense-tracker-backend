@@ -6,7 +6,6 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.rafat.expensetracker.dto.JwtToken;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -24,8 +23,7 @@ public class JwtTokenProvider {
     @Value("${jwt.expiration.refresh}")
     private Long refreshTokenDuration;
 
-    public JwtToken generateToken(Authentication authentication) {
-        String email = authentication.getName();
+    public JwtToken generateToken(String email) {
         Date now = new Date();
         Date expirationDate = new Date(now.getTime() + (accessTokenDuration * 3600000));
 
@@ -42,8 +40,7 @@ public class JwtTokenProvider {
                 .build();
     }
 
-    public JwtToken generateRefreshToken(Authentication authentication) {
-        String email = authentication.getName();
+    public JwtToken generateRefreshToken(String email) {
         Date now = new Date();
         Date expirationDate = new Date(now.getTime() + (refreshTokenDuration * 3600000));
 

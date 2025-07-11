@@ -1,9 +1,9 @@
 services:
   postgres-service:
     image: postgres:14.6
-    container_name: ssp-postgres
+    container_name: et-postgres
     ports:
-      - 5432:5432
+      - "5433:5432"
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: password
