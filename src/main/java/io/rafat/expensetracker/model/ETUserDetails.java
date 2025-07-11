@@ -1,5 +1,6 @@
 package io.rafat.expensetracker.model;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -8,10 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
-public class ETUserDetails implements UserDetails {
-
-    private final Users user;
+public record ETUserDetails(Users user) implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
