@@ -1,5 +1,6 @@
 package io.rafat.expensetracker.controller;
 
+import io.rafat.expensetracker.dto.SuccessResponse;
 import io.rafat.expensetracker.dto.bank_card.AddBankCardRequest;
 import io.rafat.expensetracker.dto.bank_card.BankCardResponse;
 import io.rafat.expensetracker.dto.bank_card.BankCardTypeResponse;
@@ -34,5 +35,11 @@ public class BankCardController {
     public ResponseEntity<?> getAllBankCards() {
         List<BankCardResponse> bankCards = bankCardService.getAllBankCards();
         return ResponseEntity.ok(bankCards);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteBankCard(@PathVariable Long id) {
+        SuccessResponse successResponse = bankCardService.removeBankCard(id);
+        return ResponseEntity.ok(successResponse);
     }
 }

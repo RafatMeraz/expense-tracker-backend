@@ -1,5 +1,6 @@
 package io.rafat.expensetracker.service;
 
+import io.rafat.expensetracker.dto.SuccessResponse;
 import io.rafat.expensetracker.dto.bank_card.AddBankCardRequest;
 import io.rafat.expensetracker.dto.bank_card.BankCardResponse;
 import io.rafat.expensetracker.dto.bank_card.BankCardTypeResponse;
@@ -86,6 +87,22 @@ public class BankCardServiceImpl implements BankCardService {
                         .build())
                 .cardNo(bankCard.getNumber())
                 .holderName(bankCard.getHolder())
+                .build();
+    }
+
+    @Override
+    public SuccessResponse removeBankCard(Long id) {
+        Users currentUser = UserUtils.getCurrentUser();
+        Optional<BankCard> bankCard = bankCardRepository.findById(id);
+
+        if (bankCard.isEmpty() || !currentUser.equals(bankCard.get().getUser())) {
+            throw new NotFoundException("Bank card not found");
+        }
+
+        bankCardRepository.deleteById(id);
+
+        return SuccessResponse.builder()
+                .message("Bank card removed")
                 .build();
     }
 }
