@@ -4,6 +4,7 @@ import io.rafat.expensetracker.dto.SuccessResponse;
 import io.rafat.expensetracker.dto.expense.AddExpenseRequest;
 import io.rafat.expensetracker.dto.expense.AddExpenseResponse;
 import io.rafat.expensetracker.dto.expense.ExpenseResponse;
+import io.rafat.expensetracker.dto.expense.UpdateExpenseRequest;
 import io.rafat.expensetracker.model.ETUserDetails;
 import io.rafat.expensetracker.model.Expense;
 import io.rafat.expensetracker.model.Users;
@@ -71,6 +72,31 @@ public class TrackExpenseServiceImpl implements TrackExpenseService {
 
         return SuccessResponse.builder()
                 .message("Expense track has been deleted")
+                .build();
+    }
+
+    @Override
+    public SuccessResponse updateExpense(Long id, UpdateExpenseRequest updateExpenseRequest) {
+        Users user = UserUtils.getCurrentUser();
+        Optional<Expense> expense = expenseRepository.findById(id);
+        if (expense.isEmpty() || !user.equals(expense.get().getUser())) {
+            throw new NotFoundException("Expense track not found");
+        }
+
+        if (!updateExpenseRequest.title().isEmpty()) {
+            expense.get().setTitle(updateExpenseRequest.title());
+        }
+        if (updateExpenseRequest.amount() != null && updateExpenseRequest.amount().intValue() > 0) {
+            expense.get().setAmount(updateExpenseRequest.amount());
+        }
+        if (updateExpenseRequest.date() != null) {
+            expense.get().setDate(updateExpenseRequest.date());
+        }
+
+        expenseRepository.save(expense.get());
+
+        return SuccessResponse.builder()
+                .message("Expense has been updated")
                 .build();
     }
 }
