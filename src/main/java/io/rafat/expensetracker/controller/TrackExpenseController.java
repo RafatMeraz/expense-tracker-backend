@@ -1,5 +1,6 @@
 package io.rafat.expensetracker.controller;
 
+import io.rafat.expensetracker.dto.SuccessResponse;
 import io.rafat.expensetracker.dto.expense.AddExpenseRequest;
 import io.rafat.expensetracker.dto.expense.AddExpenseResponse;
 import io.rafat.expensetracker.dto.expense.ExpenseResponse;
@@ -28,5 +29,11 @@ public class TrackExpenseController {
     public ResponseEntity<?> getAllExpenses() {
         List<ExpenseResponse> expenseResponseList = trackExpenseService.getExpenses();
         return new ResponseEntity<>(expenseResponseList, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteExpense(@PathVariable("id") Long id) {
+        SuccessResponse response = trackExpenseService.deleteExpense(id);
+        return ResponseEntity.ok(response);
     }
 }

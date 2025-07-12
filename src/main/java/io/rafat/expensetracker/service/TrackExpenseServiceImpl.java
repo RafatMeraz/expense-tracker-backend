@@ -1,5 +1,6 @@
 package io.rafat.expensetracker.service;
 
+import io.rafat.expensetracker.dto.SuccessResponse;
 import io.rafat.expensetracker.dto.expense.AddExpenseRequest;
 import io.rafat.expensetracker.dto.expense.AddExpenseResponse;
 import io.rafat.expensetracker.dto.expense.ExpenseResponse;
@@ -8,12 +9,14 @@ import io.rafat.expensetracker.model.Expense;
 import io.rafat.expensetracker.model.Users;
 import io.rafat.expensetracker.repository.ExpenseRepository;
 import io.rafat.expensetracker.utils.UserUtils;
+import io.rafat.expensetracker.utils.exception.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -54,5 +57,20 @@ public class TrackExpenseServiceImpl implements TrackExpenseService {
                         .date(expense.getDate())
                         .amount(expense.getAmount())
                         .build()).toList();
+    }
+
+    @Override
+    public SuccessResponse deleteExpense(Long id) {
+        Users user = UserUtils.getCurrentUser();
+        Optional<Expense> expense = expenseRepository.findById(id);
+        if (expense.isEmpty() || !user.equals(expense.get().getUser())) {
+            throw new NotFoundException("Expense track not found");
+        }
+
+        expenseRepository.deleteById(id);
+
+        return SuccessResponse.builder()
+                .message("Expense track has been deleted")
+                .build();
     }
 }
