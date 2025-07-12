@@ -2,15 +2,15 @@ package io.rafat.expensetracker.controller;
 
 import io.rafat.expensetracker.dto.expense.AddExpenseRequest;
 import io.rafat.expensetracker.dto.expense.AddExpenseResponse;
+import io.rafat.expensetracker.dto.expense.ExpenseResponse;
 import io.rafat.expensetracker.service.TrackExpenseService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/expenses")
@@ -22,5 +22,11 @@ public class TrackExpenseController {
     public ResponseEntity<?> addExpense(@Valid @RequestBody AddExpenseRequest addExpenseRequest) {
         AddExpenseResponse response = trackExpenseService.addExpense(addExpenseRequest);
         return new ResponseEntity<>(response,  HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAllExpenses() {
+        List<ExpenseResponse> expenseResponseList = trackExpenseService.getExpenses();
+        return new ResponseEntity<>(expenseResponseList, HttpStatus.OK);
     }
 }
