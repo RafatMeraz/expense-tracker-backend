@@ -2,6 +2,7 @@ package io.rafat.expensetracker.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Table(name = "bank_cards")
+@Builder(toBuilder = true)
 public class BankCard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,12 +24,13 @@ public class BankCard {
 
     private String holder;
 
-    private Date date;
-
-    private String type;
+    private String expiryDate;
 
     private String cvc;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private BankCardType bankCardType;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Users user;
 }

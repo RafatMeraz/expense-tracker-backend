@@ -1,11 +1,13 @@
 package io.rafat.expensetracker.config;
 
 import io.rafat.expensetracker.dto.ErrorResponse;
+import io.rafat.expensetracker.utils.constant.CommonMessages;
 import io.rafat.expensetracker.utils.exception.AlreadyExistsException;
 import io.rafat.expensetracker.utils.exception.NotFoundException;
 import io.rafat.expensetracker.utils.exception.UnAuthorizeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
