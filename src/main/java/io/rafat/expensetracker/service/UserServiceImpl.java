@@ -3,6 +3,7 @@ package io.rafat.expensetracker.service;
 import io.rafat.expensetracker.dto.ChangePasswordRequest;
 import io.rafat.expensetracker.dto.SuccessResponse;
 import io.rafat.expensetracker.dto.UpdateProfileRequest;
+import io.rafat.expensetracker.dto.UsersResponse;
 import io.rafat.expensetracker.model.Users;
 import io.rafat.expensetracker.repository.UsersRepository;
 import io.rafat.expensetracker.utils.UserUtils;
@@ -44,5 +45,17 @@ public class UserServiceImpl implements UserService {
         usersRepository.save(currentUser);
 
         return new SuccessResponse("Successfully updated profile");
+    }
+
+    @Override
+    public UsersResponse getProfileData() {
+        Users currentUser = UserUtils.getCurrentUser();
+
+        return UsersResponse.builder()
+                .id(currentUser.getId())
+                .fullName(currentUser.getFullName())
+                .email(currentUser.getEmail())
+                .avatarUrl(currentUser.getAvatarUrl())
+                .build();
     }
 }

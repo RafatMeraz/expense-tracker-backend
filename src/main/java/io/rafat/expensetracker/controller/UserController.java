@@ -3,6 +3,7 @@ package io.rafat.expensetracker.controller;
 import io.rafat.expensetracker.dto.ChangePasswordRequest;
 import io.rafat.expensetracker.dto.SuccessResponse;
 import io.rafat.expensetracker.dto.UpdateProfileRequest;
+import io.rafat.expensetracker.dto.UsersResponse;
 import io.rafat.expensetracker.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,12 @@ public class UserController {
     @PatchMapping("/update-profile")
     public ResponseEntity<?> updateUser(@RequestBody UpdateProfileRequest updateProfileRequest) {
         SuccessResponse response = userService.updateProfile(updateProfileRequest);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<?> getProfileData() {
+        UsersResponse response = userService.getProfileData();
         return ResponseEntity.ok(response);
     }
 }
