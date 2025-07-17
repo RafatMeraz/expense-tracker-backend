@@ -1,17 +1,26 @@
-name: Build Spring Boot JAR
+name: Build Spring Boot JAR (Corretto 21)
 
 on:
-  push:
-    branches: [ main ]
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Build version (e.g., 1.0.0)'
+        required: true
+        default: '1.0.0'
+      branch:
+        description: 'Branch to build from'
+        required: true
+        default: 'main'
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source code
+      - name: Checkout code from selected branch
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch }}
 
       - name: Set up Amazon Corretto 21
         uses: actions/setup-java@v4
@@ -29,8 +38,14 @@ jobs:
       - name: Build JAR with Maven
         run: mvn clean package -DskipTests
 
+      - name: Rename and Move JAR with Version
+        run: |
+          mkdir -p build-artifacts
+          JAR_NAME=$(ls target/*.jar | head -n 1)
+          cp "$JAR_NAME" "build-artifacts/app-${{ github.event.inputs.version }}.jar"
+
       - name: Upload JAR Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: spring-boot-app
-          path: target/*.jar
+          name: spring-boot-app-${{ github.event.inputs.version }}
+          path: build-artifacts/app-${{ github.event.inputs.version }}.jar
