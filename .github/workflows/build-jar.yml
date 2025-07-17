@@ -8,7 +8,7 @@ on:
         required: true
         default: '1.0.0'
       branch:
-        description: 'Branch to build from'
+        description: 'Branch to build from (e.g., main, develop)'
         required: true
         default: 'main'
 
@@ -17,10 +17,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code from selected branch
+      - name: Checkout selected branch
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.inputs.branch }}
+          fetch-depth: 0
 
       - name: Set up Amazon Corretto 21
         uses: actions/setup-java@v4
@@ -32,20 +33,4 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.m2
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-maven
-
-      - name: Build JAR with Maven
-        run: mvn clean package -DskipTests
-
-      - name: Rename and Move JAR with Version
-        run: |
-          mkdir -p build-artifacts
-          JAR_NAME=$(ls target/*.jar | head -n 1)
-          cp "$JAR_NAME" "build-artifacts/app-${{ github.event.inputs.version }}.jar"
-
-      - name: Upload JAR Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: spring-boot-app-${{ github.event.inputs.version }}
-          path: build-artifacts/app-${{ github.event.inputs.version }}.jar
+          key: ${{ runner.o
