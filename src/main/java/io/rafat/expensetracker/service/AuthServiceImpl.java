@@ -2,6 +2,7 @@ package io.rafat.expensetracker.service;
 
 import io.rafat.expensetracker.config.JwtTokenProvider;
 import io.rafat.expensetracker.dto.*;
+import io.rafat.expensetracker.model.ETUserDetails;
 import io.rafat.expensetracker.model.Roles;
 import io.rafat.expensetracker.model.Users;
 import io.rafat.expensetracker.repository.RolesRepository;
@@ -28,14 +29,18 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public LoginResponse login(String email, String password) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(email, password));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         JwtToken accessToken = jwtTokenProvider.generateToken(authentication.getName());
         JwtToken refreshToken = jwtTokenProvider.generateRefreshToken(authentication.getName());
 
+        Users user = ((ETUserDetails)authentication.getPrincipal()).user();
+
         return LoginResponse.builder()
+                .user(UsersResponse.getUsersResponse(user))
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
