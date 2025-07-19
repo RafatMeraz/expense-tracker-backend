@@ -1,12 +1,14 @@
 package io.rafat.expensetracker.config;
 
 import io.rafat.expensetracker.dto.ErrorResponse;
+import io.rafat.expensetracker.utils.constant.CommonMessages;
 import io.rafat.expensetracker.utils.exception.AlreadyExistsException;
 import io.rafat.expensetracker.utils.exception.BadRequestException;
 import io.rafat.expensetracker.utils.exception.NotFoundException;
 import io.rafat.expensetracker.utils.exception.UnAuthorizeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -48,6 +50,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorResponse> handleBadRequestException(BadRequestException e) {
         return new ResponseEntity<>(ErrorResponse.builder().message(e.getMessage()).build(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException e) {
+        return new ResponseEntity<>(ErrorResponse.builder().message(CommonMessages.UNAAUTHORIZED_ERROR).build(),
+                HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(Exception.class)
