@@ -6,6 +6,8 @@ import io.rafat.expensetracker.utils.exception.AlreadyExistsException;
 import io.rafat.expensetracker.utils.exception.BadRequestException;
 import io.rafat.expensetracker.utils.exception.NotFoundException;
 import io.rafat.expensetracker.utils.exception.UnAuthorizeException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,6 +21,8 @@ import java.util.Objects;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         List<Map<String, String>> errors = ex.getBindingResult().getFieldErrors().stream()
@@ -53,13 +57,14 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException e) {
+    public ResponseEntity<ErrorResponse> handleBadCredentialsException() {
         return new ResponseEntity<>(ErrorResponse.builder().message(CommonMessages.UNAAUTHORIZED_ERROR).build(),
                 HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception e) {
+        log.error(e.getMessage(), e);
         return new ResponseEntity<>(ErrorResponse.builder().message(e.getMessage()).build(),
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }

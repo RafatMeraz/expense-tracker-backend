@@ -12,7 +12,9 @@
                         }
                     </pattern>
                 </pattern>
-                <mdc /> <!-- Required to output MDC values -->
+                <mdc>
+                    <includeMdcKeyName>requestId</includeMdcKeyName>
+                </mdc>
             </providers>
         </encoder>
     </appender>
@@ -35,14 +37,16 @@
                         }
                     </pattern>
                 </pattern>
-                <mdc /> <!-- Required to output MDC values -->
+                <mdc>
+                    <includeMdcKeyName>requestId</includeMdcKeyName>
+                </mdc>
             </providers>
         </encoder>
     </appender>
 
     <logger name="com.rafat"/>
 
-    <root level="INFO">
+    <root level="WARN">
         <appender-ref ref="consoleAppender" />
         <appender-ref ref="fileAppender" />
     </root>
