@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: expense-tracker
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/expense-tracker
+    username: admin
+    password: password
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: 8080
+
+jwt:
+  secret:
+    key: QNLfgg8mMzkRdiFOxhDCKMhNM5CbZgQ2QcKkHJ4s1pc=
+  expiration:
+    access: 24
+    refresh: 120
