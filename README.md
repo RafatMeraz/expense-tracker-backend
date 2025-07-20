@@ -24,6 +24,7 @@ docker run -d --name et-app -p 8080:8080 -e SPRING_PROFILES_ACTIVE=dev
 For `production`, you have run
 ```shell
 docker run -d --name et-app -p 8080:8080 \
+  -v /home/ec2-user/app-logs:/app/logs \
   -e SPRING_PROFILES_ACTIVE=prod \
   -e DB_URL=your-db-host \
   -e DB_PORT=5432 \

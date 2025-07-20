@@ -19,12 +19,15 @@
         </encoder>
     </appender>
     <appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>expense-tracker.log</file>
+
+        <file>/app/logs/expense-tracker.log</file>
+
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>expense-tracker-%d{yy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>/app/logs/expense-tracker-%d{yy-MM-dd}.%i.log</fileNamePattern>
             <maxFileSize>10MB</maxFileSize>
             <maxHistory>10</maxHistory>
         </rollingPolicy>
+
         <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers>
                 <timestamp />
