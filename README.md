@@ -10,7 +10,7 @@ To run this project, first run `docker-compose.yml` to set up the database.
 ## Docker Deploy
 To build an image to deploy, run on the terminal
 
-```
+```shell
 docker build --platform linux/amd64 -t expense-tracker:version .
 ```
 It will generate an image for you.
