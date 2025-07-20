@@ -7,7 +7,7 @@ This project is using
 
 To run this project, first run `docker-compose.yml` to set up the database. 
 
-## Deploy
+## Docker Deploy
 To build an image to deploy, run on the terminal
 
 ```
@@ -15,7 +15,27 @@ docker build --platform linux/amd64 -t expense-tracker:version .
 ```
 It will generate an image for you.
 
-## RUN
+If you want to run your image with `development` environment
+
+```shell
+docker run -d --name et-app -p 8080:8080 -e SPRING_PROFILES_ACTIVE=dev
+```
+
+For `production`, you have run
+```shell
+docker run -d --name et-app -p 8080:8080 \
+  -e SPRING_PROFILES_ACTIVE=prod \
+  -e DB_URL=your-db-host \
+  -e DB_PORT=5432 \
+  -e DB_NAME=your-db \
+  -e DB_USERNAME=admin \
+  -e DB_PASSWORD=secret \
+  -e JWT_SECRET=your-secret \
+  -e ACCESS_TOKEN_EXP=3600000 \
+  -e REFRESH_TOKEN_EXP=604800000 \
+  expense-tracker:version
+```
+## RUN AS JAR
 
 To make a Jar, run in the terminal
 
